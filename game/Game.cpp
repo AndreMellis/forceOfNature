@@ -18,9 +18,14 @@ bool Game::init()
         {
             SDL_GetRenderOutputSize( pGameRenderer, &iWindowWidth, &iWindowHeight );
 
-            /*
-                EVERYTHING TO INIT HERE
-            */
+            // Radar Initialization
+            radar.loadTextures( pGameRenderer );
+            rectRadar = {
+                iWindowWidth * .60f,
+                0,
+                iWindowWidth * .30f,
+                iWindowHeight * .50f
+                };
 
         } else
         {
@@ -93,7 +98,7 @@ void Game::run()
 
 void Game::handleRendering()
 {
-    
+    radar.render( pGameRenderer, &rectRadar );
 }
 
 void Game::handleEvents( SDL_Event &event )
@@ -103,5 +108,5 @@ void Game::handleEvents( SDL_Event &event )
 
 void Game::tick()
 {
-
+    radar.tick();
 }

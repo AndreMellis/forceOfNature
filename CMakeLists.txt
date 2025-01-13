@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 project(forcesOfNature VERSION 1.0)
 
 include_directories("game" 
+                    "game/objects"
                     )
 
 add_subdirectory(libs/customCLib) 
@@ -15,7 +16,11 @@ find_package(SDL3_ttf REQUIRED)
 
 set(SOURCES 
     game/Game.cpp
+    game/objects/Radar.cpp
     )
 
 add_executable(forcesOfNature.out main.cpp ${SOURCES})
 target_link_libraries(forcesOfNature.out PRIVATE SDL3::SDL3 SDL3_image SDL3_ttf customCLib )
+
+### ASSET MANAGEMENT ###
+file( COPY assets DESTINATION ${CMAKE_BINARY_DIR} )

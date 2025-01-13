@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "SDLTools/LTimer.h" // from customCLib
+#include "Radar.h"
 
 class Game
 {
@@ -16,10 +17,14 @@ private:
     SDL_Window *pGameWindow;
 
     LTimer fpsTimer;
+    Radar radar;
 
     int iWindowWidth, iWindowHeight;
     const int iScreenFPS = 30;
     const int iScreenTicksPerFrame = 1000 / iScreenFPS;
+
+    // I want to hardset cords here for this game
+    SDL_FRect rectRadar;
 
     void tick();
     void handleRendering(); // a place to drop all the rendering and leave run clean
