@@ -1,0 +1,3 @@
+[submodule "libs/customCLib"]
+	path = libs/customCLib
+	url = git@github.com:AndreMellis/customCLib.git
