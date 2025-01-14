@@ -2,6 +2,9 @@
 build
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,visualstudiocode,cmake,c++,c,visualstudio
 
+### SubModule ###
+libs/
+
 ### C ###
 # Prerequisites
 *.d
