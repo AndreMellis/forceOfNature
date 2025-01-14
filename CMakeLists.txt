@@ -5,6 +5,8 @@ project(forcesOfNature VERSION 1.0)
 
 include_directories("game" 
                     "game/objects"
+                    "game/choiceSystem"
+                    "game/riskSystem"
                     )
 
 add_subdirectory(libs/customCLib) 
@@ -17,6 +19,7 @@ find_package(SDL3_ttf REQUIRED)
 set(SOURCES 
     game/Game.cpp
     game/objects/Radar.cpp
+    game/riskSystem/RiskHandler.cpp
     )
 
 add_executable(forcesOfNature.out main.cpp ${SOURCES})

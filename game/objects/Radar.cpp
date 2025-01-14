@@ -43,23 +43,23 @@ void Radar::tick()
 
     switch(iCountedFrames)
     {
-        case 30:
+        case 20:
             iCurrentRenderFrame = 1;
             break;
 
-        case 60:
+        case 40:
             iCurrentRenderFrame = 2;
             break;
 
-        case 90:
+        case 60:
             iCurrentRenderFrame = 3;
             break;
 
-        case 120:
+        case 80:
             iCurrentRenderFrame = 4;
             break;
 
-        case 150:
+        case 100:
             iCurrentRenderFrame = 0;
             iCountedFrames = 0;
     }

@@ -21,11 +21,18 @@ bool Game::init()
             // Radar Initialization
             radar.loadTextures( pGameRenderer );
             rectRadar = {
-                iWindowWidth * .60f,
+                iWindowWidth * .66f,
                 0,
-                iWindowWidth * .30f,
+                iWindowWidth - ( iWindowWidth * .66f ),
                 iWindowHeight * .50f
                 };
+
+            rectRisks = {
+                iWindowWidth * .66f,
+                iWindowHeight * .50f,
+                iWindowWidth * .33f - 20,
+                iWindowHeight * .50f
+            };
 
         } else
         {
@@ -60,6 +67,7 @@ void Game::run()
     bool bGameRunning = 1;
     int iCountedFrames = 0;
 
+    SDL_SetRenderDrawColor( pGameRenderer, 0, 0, 0, 255 );
     SDL_RenderClear(pGameRenderer);
     handleRendering();
     SDL_RenderPresent(pGameRenderer);
@@ -84,6 +92,7 @@ void Game::run()
             break;
 
         tick();
+        SDL_SetRenderDrawColor( pGameRenderer, 0, 0, 0, 255 );
         SDL_RenderClear( pGameRenderer );
         handleRendering();
         SDL_RenderPresent( pGameRenderer );
@@ -99,6 +108,7 @@ void Game::run()
 void Game::handleRendering()
 {
     radar.render( pGameRenderer, &rectRadar );
+    riskHandler.render( pGameRenderer, &rectRisks );
 }
 
 void Game::handleEvents( SDL_Event &event )
@@ -109,4 +119,5 @@ void Game::handleEvents( SDL_Event &event )
 void Game::tick()
 {
     radar.tick();
+    riskHandler.tick();
 }
