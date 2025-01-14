@@ -3,11 +3,11 @@
 
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include <SDLTools/LTimer.h> // from customCLib
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL.h>
 #include <iostream>
 
+#include "SDLTools/LTimer.h" // from customCLib
 
 class Game
 {
