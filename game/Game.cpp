@@ -11,12 +11,14 @@ bool Game::init()
 {
     srand(time(0));
 
-    if( SDL_CreateWindowAndRenderer( "Force Of Nature", 1800, 900, SDL_WINDOW_FULLSCREEN, &pGameWindow, &pGameRenderer ) )
+    if( SDL_CreateWindowAndRenderer( "Force Of Nature", 0, 0, SDL_WINDOW_FULLSCREEN, &pGameWindow, &pGameRenderer ) )
     {
         SDL_SetRenderDrawColor( pGameRenderer, 0, 0, 0, 255 );
         if( TTF_Init() >= 0 )
         {
-            SDL_GetRenderOutputSize( pGameRenderer, &iWindowWidth, &iWindowHeight );
+            //SDL_GetRenderOutputSize( pGameRenderer, &iWindowWidth, &iWindowHeight );
+            SDL_SyncWindow( pGameWindow );
+            SDL_GetWindowSize( pGameWindow, &iWindowWidth, &iWindowHeight );
 
             // Radar Initialization
             radar.loadTextures( pGameRenderer );
@@ -30,7 +32,7 @@ bool Game::init()
             rectRisks = {
                 iWindowWidth * .66f,
                 iWindowHeight * .50f,
-                iWindowWidth * .33f - 20,
+                iWindowWidth * .33f,
                 iWindowHeight * .50f
             };
 

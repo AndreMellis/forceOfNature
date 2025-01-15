@@ -6,10 +6,10 @@
 class RiskHandler
 {
 private:
-    int iFloodDamagePercentageRisk; // there is an X percent change of a flood happening
-    int iHurricaneDamagePercentageRisk; // there is an X percent change of a flood happening
-    int iStarvationDamagePercentageRisk; // there is an X percent change of starvation
-    int iEarthquakeDamagePercentageRisk; // there is an X percent change of an earthquake risk
+    float fFloodDamagePercentageRisk; // there is an X percent change of a flood happening
+    float fHurricaneDamagePercentageRisk; // there is an X percent change of a flood happening
+    float fStarvationDamagePercentageRisk; // there is an X percent change of starvation
+    float fEarthquakeDamagePercentageRisk; // there is an X percent change of an earthquake risk
     int iTotalRisksToRenderToScreen = 4; // I will use this to track how many bar graphs to render
 
     // SDL Rects for bar graphs
