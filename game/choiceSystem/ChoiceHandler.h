@@ -1,11 +1,6 @@
 #ifndef CHOICE_HANDLER_HEADER
 #define CHOICE_HANDLER_HEADER
 
-struct Decision 
-{
-    const char *strDescription, *strLeftChildDesc, *strRightChildDesc;
-    Decision *decLeftChild, *decRightChild;
-};
 
 struct RiskResults
 {
@@ -15,6 +10,13 @@ struct RiskResults
     float fStarvationRiskChange;
     float fMoneyChange;
     float fHappinessChange;
+};
+
+struct Decision 
+{
+    const char *strDescription, *strLeftChildDesc, *strRightChildDesc;
+    RiskResults rrLeftChoiceResults, rrRightChoiceResults;
+    Decision *decLeftChild, *decRightChild;
 };
 
 class ChoiceHandler
@@ -30,6 +32,9 @@ private:
     Decision *arrDecisionTrees[DECISION_TREE_COUNT] = {nullptr};
 
     void genHungerTree();
+    void genCoastLineTree();
+    void genZoningTree();
+    Decision *constructDecision(const char *strInputDescription, const char *strInputLeftChildDesc, const char *strInputRightChildDesc, RiskResults inputLeftResults, RiskResults inputRightResults, Decision *decInputLeftChild = nullptr, Decision *decInputRightChild = nullptr);
 public:
     ChoiceHandler();
     
