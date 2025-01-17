@@ -1,10 +1,21 @@
 #include "ChoiceHandler.h"
 
+Decision::~Decision()
+{
+    if(decLeftChild)
+        delete decLeftChild;
+
+    if(decRightChild)
+        delete decRightChild;
+}
+
 ChoiceHandler::ChoiceHandler()
 {
     genHungerTree();
     genCoastLineTree();
     genZoningTree();
+
+    iLastTreeTaken = -1;
 }
 
 Decision *ChoiceHandler::constructDecision(const char *strInputDescription, const char *strInputLeftChildDesc, const char *strInputRightChildDesc, RiskResults inputLeftResults, RiskResults inputRightResults, Decision *decInputLeftChild, Decision *decInputRightChild)
@@ -189,4 +200,43 @@ void ChoiceHandler::genCoastLineTree()
     );
 
     arrDecisionTrees[COASTLINE_DECISION_TREE] = parentNode;
+}
+
+Decision *ChoiceHandler::getRandomDecision()
+{
+    iLastTreeTaken = rand() % ( DECISION_TREE_COUNT - 1 );
+    return arrDecisionTrees[iLastTreeTaken];
+}
+
+void ChoiceHandler::makeDecision(bool bLeftRight)
+{
+    if(iLastTreeTaken < 0 || iLastTreeTaken >= DECISION_TREE_COUNT)
+        return; // avoid going out of bounds
+
+    Decision *decToPutOnTop;
+
+    if( iLastTreeTaken == ZONING_DECISION_TREE )
+    { // only this one is not a tree
+        decToPutOnTop = arrDecisionTrees[iLastTreeTaken]->decLeftChild;
+
+        arrDecisionTrees[iLastTreeTaken]->decLeftChild = nullptr;
+        arrDecisionTrees[iLastTreeTaken]->decRightChild = nullptr;
+
+    } else
+    {
+        if( !bLeftRight )
+        {  // we made the left decision
+            decToPutOnTop = arrDecisionTrees[iLastTreeTaken]->decLeftChild;
+            arrDecisionTrees[iLastTreeTaken]->decLeftChild = nullptr;
+        } else
+        { // we made a right decision
+            decToPutOnTop = arrDecisionTrees[iLastTreeTaken]->decRightChild;
+            arrDecisionTrees[iLastTreeTaken] = nullptr;
+        }
+    }
+
+    delete arrDecisionTrees[iLastTreeTaken];
+    arrDecisionTrees[iLastTreeTaken] = decToPutOnTop;
+
+    iLastTreeTaken = -1;
 }
