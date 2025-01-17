@@ -9,6 +9,7 @@
 
 #include "SDLTools/LTimer.h" // from customCLib
 #include "RiskHandler.h"
+#include "EventStack.h"
 #include "Radar.h"
 
 class Game
@@ -17,6 +18,7 @@ private:
     SDL_Renderer *pGameRenderer;
     SDL_Window *pGameWindow;
 
+    EventStack gameEventStack;
     RiskHandler riskHandler;
     LTimer fpsTimer;
     Radar radar;
@@ -30,6 +32,7 @@ private:
 
     void tick();
     void handleRendering(); // a place to drop all the rendering and leave run clean
+    void handleGameEvents(); // handle events on the game stack
     void handleEvents(SDL_Event &event); // a place to drop all the event handling
 
 public:

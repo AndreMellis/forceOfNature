@@ -2,16 +2,7 @@
 #define CHOICE_HANDLER_HEADER
 
 #include <cstdlib>
-
-struct RiskResults
-{
-    float fFloodRiskChange;
-    float fHurricaneRiskChange;
-    float fEarthquakeRiskChange;
-    float fStarvationRiskChange;
-    float fMoneyChange;
-    float fHappinessChange;
-};
+#include "Risks.h"
 
 struct Decision 
 {

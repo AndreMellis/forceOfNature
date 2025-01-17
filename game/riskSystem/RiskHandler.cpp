@@ -83,3 +83,16 @@ void RiskHandler::tick()
 {
 
 }
+
+void RiskHandler::handleGameEvent( EventStack *pGameEventStack )
+{
+    if( !pGameEventStack->empty() )
+    {
+        Event eventToProcess = pGameEventStack->top();
+
+        fFloodDamagePercentageRisk += eventToProcess.risksResults.fFloodRiskChange;
+        fHurricaneDamagePercentageRisk += eventToProcess.risksResults.fHurricaneRiskChange;
+        fEarthquakeDamagePercentageRisk += eventToProcess.risksResults.fEarthquakeRiskChange;
+        fStarvationDamagePercentageRisk += eventToProcess.risksResults.fStarvationRiskChange;
+    }
+}

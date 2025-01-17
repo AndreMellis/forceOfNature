@@ -3,6 +3,9 @@
 
 #include <SDL3/SDL.h>
 
+#include "EventStack.h"
+#include "Risks.h"
+
 class RiskHandler
 {
 private:
@@ -20,6 +23,7 @@ public:
     RiskHandler();
 
     void tick();
+    void handleGameEvent( EventStack *pGameEventStack );
     void render( SDL_Renderer *pGameRenderer, SDL_FRect *dstRec );
 
 };

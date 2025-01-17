@@ -93,6 +93,7 @@ void Game::run()
         if( !bGameRunning )
             break;
 
+        handleGameEvents();
         tick();
         SDL_SetRenderDrawColor( pGameRenderer, 0, 0, 0, 255 );
         SDL_RenderClear( pGameRenderer );
@@ -115,7 +116,25 @@ void Game::handleRendering()
 
 void Game::handleEvents( SDL_Event &event )
 {
+}
 
+void Game::handleGameEvents()
+{
+    while( !gameEventStack.empty() )
+    {
+        EventType eventLastGameEvent = gameEventStack.top().eventType;
+
+        /*
+            HANDLE ALL GAME EVENTS HERE
+        */
+        riskHandler.handleGameEvent( &gameEventStack );
+
+        if( !gameEventStack.empty() && gameEventStack.top().eventType == eventLastGameEvent )
+        { // the event stack is not empty and we processed an event that noone removed
+            gameEventStack.pop();
+        }
+
+    }
 }
 
 void Game::tick()
