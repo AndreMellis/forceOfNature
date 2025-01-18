@@ -10,7 +10,7 @@ SDL3_TTF -> https://github.com/libsdl-org/SDL_ttf
 
 SDL3_Image -> https://github.com/libsdl-org/SDL_image
 
-### Building the Project
+### Building the Project - Linux
 
 First we need to clone the project:
 
