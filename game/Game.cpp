@@ -1,6 +1,5 @@
 #include "Game.h"
 
-
 Game::Game()
 {
     pGameWindow = nullptr;
@@ -23,13 +22,16 @@ bool Game::init()
             // Texture Initialization
             radar.loadTextures( pGameRenderer );
             islandMap.loadTextures( pGameRenderer );
+            choiceHandler.loadFonts();
 
             // rects
+            float fPaddingSize = 5.0f;
+
             rectRadar = {
-                iWindowWidth * .66f,
-                0,
-                iWindowWidth - ( iWindowWidth * .66f ),
-                iWindowHeight * .50f
+                (iWindowWidth * .66f) + fPaddingSize,
+                fPaddingSize,
+                iWindowWidth - ( iWindowWidth * .66f ) - fPaddingSize,
+                iWindowHeight * .50f - fPaddingSize
                 };
 
             rectRisks = {
@@ -40,10 +42,17 @@ bool Game::init()
             };
 
             rectIslandMap = {
-                iWindowWidth * .66f,
-                iWindowHeight * .50f,
-                iWindowWidth - ( iWindowWidth * .66f ),
-                iWindowHeight * .50f
+                (iWindowWidth * .66f) + fPaddingSize,
+                (iWindowHeight * .50f) + fPaddingSize,
+                iWindowWidth - ( iWindowWidth * .66f ) - fPaddingSize,
+                iWindowHeight * .50f - fPaddingSize
+            };
+
+            rectDecisionWindow = {
+                (iWindowWidth * .33f) + fPaddingSize,
+                fPaddingSize,
+                (iWindowWidth * .33f) - fPaddingSize,
+                iWindowHeight * .50f - fPaddingSize
             };
 
         } else
@@ -103,8 +112,8 @@ void Game::run()
         if( !bGameRunning )
             break;
 
-        handleGameEvents();
         tick();
+        handleGameEvents();
         SDL_SetRenderDrawColor( pGameRenderer, 0, 0, 0, 255 );
         SDL_RenderClear( pGameRenderer );
         handleRendering();
@@ -120,6 +129,7 @@ void Game::run()
 
 void Game::handleRendering()
 {
+    choiceHandler.render( pGameRenderer, &rectDecisionWindow );
     radar.render( pGameRenderer, &rectRadar );
     riskHandler.render( pGameRenderer, &rectRisks );
     islandMap.render( pGameRenderer, &rectIslandMap );
@@ -131,6 +141,8 @@ void Game::handleEvents( SDL_Event &event )
 
 void Game::handleGameEvents()
 {
+    choiceHandler.generateEvent( &gameEventStack, pGameRenderer );
+
     while( !gameEventStack.empty() )
     {
         EventType eventLastGameEvent = gameEventStack.top().eventType;

@@ -16,6 +16,10 @@ ChoiceHandler::ChoiceHandler()
     genZoningTree();
 
     iLastTreeTaken = -1;
+    gameTimer.start();
+
+    choiceFont = nullptr;
+    renderingDecisionTexture = nullptr;
 }
 
 Decision *ChoiceHandler::constructDecision(const char *strInputDescription, const char *strInputLeftChildDesc, const char *strInputRightChildDesc, RiskResults inputLeftResults, RiskResults inputRightResults, Decision *decInputLeftChild, Decision *decInputRightChild)
@@ -204,7 +208,7 @@ void ChoiceHandler::genCoastLineTree()
 
 Decision *ChoiceHandler::getRandomDecision()
 {
-    iLastTreeTaken = rand() % ( DECISION_TREE_COUNT - 1 );
+    iLastTreeTaken = rand() % DECISION_TREE_COUNT;
     return arrDecisionTrees[iLastTreeTaken];
 }
 
@@ -239,4 +243,95 @@ void ChoiceHandler::makeDecision(bool bLeftRight)
     arrDecisionTrees[iLastTreeTaken] = decToPutOnTop;
 
     iLastTreeTaken = -1;
+}
+
+void ChoiceHandler::generateEvent( EventStack *pGameEventStack, SDL_Renderer *pGameRenderer )
+{
+    // hard coding the box because I'm lazy
+    int iWindowWidth, iWindowHeight;
+    int iBoxLen = SDL_GetRenderOutputSize( pGameRenderer, &iWindowWidth, &iWindowHeight );
+
+    if( gameTimer.getTicks() >= iMillisecondsBetweenDecisions )
+    { // time for a decision
+        getRandomDecision();
+        SDL_DestroyTexture(renderingDecisionTexture); // pop the last text out the heap
+        SDL_DestroyTexture(renderingDecisionLeftOption); // pop the last text out the heap
+        SDL_DestroyTexture(renderingDecisionRightOption); // pop the last text out the heap
+
+        renderingDecisionTexture = TextureHandler::renderTextureFromFontWrapped( arrDecisionTrees[iLastTreeTaken]->strDescription,
+                                                                                (iWindowWidth * 0.33f) - 10,
+                                                                                choiceFont, 
+                                                                                pGameRenderer,
+                                                                                {255, 255, 255, 255}, //white
+                                                                                &fRenderedWidth,
+                                                                                &fRenderedHeight
+                                                                                );
+
+        renderingDecisionLeftOption = TextureHandler::renderTextureFromFontWrapped( arrDecisionTrees[iLastTreeTaken]->strLeftChildDesc,
+                                                                                (iWindowWidth * 0.33f) - 10,
+                                                                                choiceFont, 
+                                                                                pGameRenderer,
+                                                                                {255, 255, 255, 255}, //white
+                                                                                &fLeftOptionWidth,
+                                                                                &fLeftOptionHeight
+                                                                                );
+
+        renderingDecisionRightOption = TextureHandler::renderTextureFromFontWrapped( arrDecisionTrees[iLastTreeTaken]->strRightChildDesc,
+                                                                                (iWindowWidth * 0.33f) - 10,
+                                                                                choiceFont, 
+                                                                                pGameRenderer,
+                                                                                {255, 255, 255, 255}, //white
+                                                                                &fRightOptionWidth,
+                                                                                &fRightOptionHeight
+                                                                                );
+
+                                            
+        gameTimer.start(); // restart the timer
+    }
+}
+
+bool ChoiceHandler::loadFonts()
+{
+    choiceFont = TTF_OpenFont( "assets/fonts/rye.ttf", 20 );
+
+    if(choiceFont)
+    {
+        return 1;
+    } else
+    {
+        std::cerr << "Failed to load assets/fonts/rye.ttf\n";
+        return 0;
+    }
+}
+
+void ChoiceHandler::render( SDL_Renderer *pGameRenderer, SDL_FRect *rectDecisionWindow )
+{
+    if( renderingDecisionTexture && iLastTreeTaken >= 0 )
+    { // we are actively making a decision
+        SDL_FRect rectDst = {
+            rectDecisionWindow->x,
+            rectDecisionWindow->y,
+            fRenderedWidth,
+            fRenderedHeight
+        };
+
+        SDL_FRect rectLeftOpt = {
+            rectDecisionWindow->x,
+            (rectDecisionWindow->y + rectDecisionWindow->h) - fLeftOptionHeight,
+            fLeftOptionWidth,
+            fLeftOptionHeight
+        };
+
+        SDL_FRect rectRightOpt = {
+            (rectDecisionWindow->x + rectDecisionWindow->w) - fRightOptionWidth,
+            (rectDecisionWindow->y + rectDecisionWindow->h) - fRightOptionHeight,
+            fRightOptionWidth,
+            fRightOptionHeight
+        };
+
+
+        SDL_RenderTexture( pGameRenderer, renderingDecisionTexture, nullptr, &rectDst );
+        SDL_RenderTexture( pGameRenderer, renderingDecisionLeftOption, nullptr, &rectLeftOpt );
+        SDL_RenderTexture( pGameRenderer, renderingDecisionRightOption, nullptr, &rectRightOpt );
+    }
 }

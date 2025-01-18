@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "SDLTools/LTimer.h" // from customCLib
+#include "ChoiceHandler.h"
 #include "RiskHandler.h"
 #include "EventStack.h"
 #include "IslandMap.h"
@@ -19,6 +20,7 @@ private:
     SDL_Renderer *pGameRenderer;
     SDL_Window *pGameWindow;
 
+    ChoiceHandler choiceHandler;
     EventStack gameEventStack;
     RiskHandler riskHandler;
     IslandMap islandMap;
@@ -30,7 +32,7 @@ private:
     const int iScreenTicksPerFrame = 1000 / iScreenFPS;
 
     // I want to hardset cords here for this game
-    SDL_FRect rectRadar, rectRisks, rectIslandMap;
+    SDL_FRect rectRadar, rectRisks, rectIslandMap, rectDecisionWindow;
 
     void tick();
     void handleRendering(); // a place to drop all the rendering and leave run clean
