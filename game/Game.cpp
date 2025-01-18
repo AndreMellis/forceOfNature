@@ -105,7 +105,7 @@ void Game::run()
                 break;
             } else
             {
-                handleEvents(sdlEvents);
+                handleEvents(&sdlEvents);
             }
         }
 
@@ -135,13 +135,14 @@ void Game::handleRendering()
     islandMap.render( pGameRenderer, &rectIslandMap );
 }
 
-void Game::handleEvents( SDL_Event &event )
+void Game::handleEvents( SDL_Event *event )
 {
+    choiceHandler.handleEvents( event );
 }
 
 void Game::handleGameEvents()
 {
-    choiceHandler.generateEvent( &gameEventStack, pGameRenderer );
+    choiceHandler.generateEvent( pGameRenderer );
 
     while( !gameEventStack.empty() )
     {

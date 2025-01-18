@@ -37,7 +37,7 @@ private:
     void tick();
     void handleRendering(); // a place to drop all the rendering and leave run clean
     void handleGameEvents(); // handle events on the game stack
-    void handleEvents(SDL_Event &event); // a place to drop all the event handling
+    void handleEvents(SDL_Event *event); // a place to drop all the event handling
 
 public:
     Game();

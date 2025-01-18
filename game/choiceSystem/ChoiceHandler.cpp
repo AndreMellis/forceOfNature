@@ -1,4 +1,5 @@
 #include "ChoiceHandler.h"
+#include <cstdio>
 
 Decision::~Decision()
 {
@@ -245,7 +246,7 @@ void ChoiceHandler::makeDecision(bool bLeftRight)
     iLastTreeTaken = -1;
 }
 
-void ChoiceHandler::generateEvent( EventStack *pGameEventStack, SDL_Renderer *pGameRenderer )
+void ChoiceHandler::generateEvent( SDL_Renderer *pGameRenderer )
 {
     // hard coding the box because I'm lazy
     int iWindowWidth, iWindowHeight;
@@ -315,14 +316,14 @@ void ChoiceHandler::render( SDL_Renderer *pGameRenderer, SDL_FRect *rectDecision
             fRenderedHeight
         };
 
-        SDL_FRect rectLeftOpt = {
+        rectLeftOpt = {
             rectDecisionWindow->x,
             (rectDecisionWindow->y + rectDecisionWindow->h) - fLeftOptionHeight,
             fLeftOptionWidth,
             fLeftOptionHeight
         };
 
-        SDL_FRect rectRightOpt = {
+        rectRightOpt = {
             (rectDecisionWindow->x + rectDecisionWindow->w) - fRightOptionWidth,
             (rectDecisionWindow->y + rectDecisionWindow->h) - fRightOptionHeight,
             fRightOptionWidth,
@@ -333,5 +334,23 @@ void ChoiceHandler::render( SDL_Renderer *pGameRenderer, SDL_FRect *rectDecision
         SDL_RenderTexture( pGameRenderer, renderingDecisionTexture, nullptr, &rectDst );
         SDL_RenderTexture( pGameRenderer, renderingDecisionLeftOption, nullptr, &rectLeftOpt );
         SDL_RenderTexture( pGameRenderer, renderingDecisionRightOption, nullptr, &rectRightOpt );
+    }
+}
+
+void ChoiceHandler::handleEvents( SDL_Event *event )
+{
+    if( event->type == SDL_EVENT_MOUSE_BUTTON_UP && iLastTreeTaken >= 0 )
+    {
+        float fMouseX, fMouseY;
+        SDL_GetMouseState( &fMouseX, &fMouseY );
+        SDL_FRect rectMouseClick = { fMouseX, fMouseY, 1, 1 }; // one pixel rect where mouse was clicked
+
+        if( SDL_HasRectIntersectionFloat( &rectMouseClick, &rectLeftOpt ) )
+        { // the left option was taken
+            printf("Left option taken!\n");
+        } else if( SDL_HasRectIntersectionFloat( &rectMouseClick, &rectRightOpt ) )
+        { // the right option was taken
+            printf("Right option taken!\n");
+        }
     }
 }

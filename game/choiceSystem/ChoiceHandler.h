@@ -39,6 +39,7 @@ private:
     TTF_Font *choiceFont;
     SDL_Texture *renderingDecisionTexture, *renderingDecisionLeftOption, *renderingDecisionRightOption;
     float fRenderedWidth, fRenderedHeight, fLeftOptionWidth, fLeftOptionHeight, fRightOptionWidth, fRightOptionHeight;
+    SDL_FRect rectLeftOpt, rectRightOpt;
 
     void genHungerTree();
     void genCoastLineTree();
@@ -55,7 +56,8 @@ public:
     
     void makeDecision(bool bLeftRight); // 0 is left, 1 is right
 
-    void generateEvent( EventStack *pGameEventStack, SDL_Renderer *pGameRenderer );
+    void generateEvent( SDL_Renderer *pGameRenderer );
+    void handleEvents( SDL_Event *event );
 };
 
 #endif
