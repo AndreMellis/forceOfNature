@@ -48,16 +48,15 @@ private:
     Decision *constructDecision(const char *strInputDescription, const char *strInputLeftChildDesc, const char *strInputRightChildDesc, RiskResults inputLeftResults, RiskResults inputRightResults, Decision *decInputLeftChild = nullptr, Decision *decInputRightChild = nullptr);
     Decision *getRandomDecision(); // grabs the parent node of a random tree
 
+    void makeDecision(bool bLeftRight, EventStack *pGameEventStack ); // 0 is left, 1 is right
 public:
     ChoiceHandler();
 
     bool loadFonts();
     void render( SDL_Renderer *pGameRenderer, SDL_FRect *rectDecisionWindow );
-    
-    void makeDecision(bool bLeftRight); // 0 is left, 1 is right
 
     void generateEvent( SDL_Renderer *pGameRenderer );
-    void handleEvents( SDL_Event *event );
+    void handleEvents( SDL_Event *event, EventStack *pGameEventStack );
 };
 
 #endif

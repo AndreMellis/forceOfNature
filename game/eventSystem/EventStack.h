@@ -13,7 +13,7 @@ enum EventType
 struct Event
 {
     EventType eventType;
-    RiskResults risksResults = {0, 0, 0, 0, 0, 0}; // initialize to null just incase
+    RiskResults risksResults; // initialize to null just incase
 };
 
 class EventStack
