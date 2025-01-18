@@ -137,7 +137,7 @@ void Game::handleRendering()
 
 void Game::handleEvents( SDL_Event *event )
 {
-    choiceHandler.handleEvents( event );
+    choiceHandler.handleEvents( event, &gameEventStack );
 }
 
 void Game::handleGameEvents()

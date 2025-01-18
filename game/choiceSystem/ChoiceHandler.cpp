@@ -1,5 +1,4 @@
 #include "ChoiceHandler.h"
-#include <cstdio>
 
 Decision::~Decision()
 {
@@ -88,7 +87,7 @@ void ChoiceHandler::genZoningTree()
         "no",
         "yes",
         { 0, 0, 0, 0, 0, 0 },
-        { -0.10, 0, 0, 0, -25 },
+        { -0.10, -0.10, 0, 0, 0, -25 },
         decFutureChild,
         decFutureChild
     );
@@ -199,7 +198,7 @@ void ChoiceHandler::genCoastLineTree()
         "Leave them Alone",
         "Cut them down",
         { 0, 0, 0, 0, 0, 0 },
-        { 0.10, 0.10, 0, -1000, 0 },
+        { 0.10, 0.10, 0, 0, -1000, 0 },
         nullptr,
         decFutureRightChild
     );
@@ -213,7 +212,7 @@ Decision *ChoiceHandler::getRandomDecision()
     return arrDecisionTrees[iLastTreeTaken];
 }
 
-void ChoiceHandler::makeDecision(bool bLeftRight)
+void ChoiceHandler::makeDecision( bool bLeftRight, EventStack *pGameEventStack )
 {
     if(iLastTreeTaken < 0 || iLastTreeTaken >= DECISION_TREE_COUNT)
         return; // avoid going out of bounds
@@ -223,6 +222,13 @@ void ChoiceHandler::makeDecision(bool bLeftRight)
     if( iLastTreeTaken == ZONING_DECISION_TREE )
     { // only this one is not a tree
         decToPutOnTop = arrDecisionTrees[iLastTreeTaken]->decLeftChild;
+        if( !bLeftRight )
+        {
+            pGameEventStack->push_back( { DECISION_MADE_EVENT, arrDecisionTrees[iLastTreeTaken]->rrLeftChoiceResults } );
+        } else
+        {
+            pGameEventStack->push_back( { DECISION_MADE_EVENT, arrDecisionTrees[iLastTreeTaken]->rrRightChoiceResults } );
+        }
 
         arrDecisionTrees[iLastTreeTaken]->decLeftChild = nullptr;
         arrDecisionTrees[iLastTreeTaken]->decRightChild = nullptr;
@@ -231,10 +237,14 @@ void ChoiceHandler::makeDecision(bool bLeftRight)
     {
         if( !bLeftRight )
         {  // we made the left decision
+            pGameEventStack->push_back( { DECISION_MADE_EVENT, arrDecisionTrees[iLastTreeTaken]->rrLeftChoiceResults } );
+
             decToPutOnTop = arrDecisionTrees[iLastTreeTaken]->decLeftChild;
             arrDecisionTrees[iLastTreeTaken]->decLeftChild = nullptr;
         } else
         { // we made a right decision
+            pGameEventStack->push_back( { DECISION_MADE_EVENT, arrDecisionTrees[iLastTreeTaken]->rrRightChoiceResults } );
+
             decToPutOnTop = arrDecisionTrees[iLastTreeTaken]->decRightChild;
             arrDecisionTrees[iLastTreeTaken] = nullptr;
         }
@@ -243,6 +253,9 @@ void ChoiceHandler::makeDecision(bool bLeftRight)
     delete arrDecisionTrees[iLastTreeTaken];
     arrDecisionTrees[iLastTreeTaken] = decToPutOnTop;
 
+    SDL_DestroyTexture(renderingDecisionTexture);
+    SDL_DestroyTexture(renderingDecisionLeftOption);
+    SDL_DestroyTexture(renderingDecisionRightOption);
     iLastTreeTaken = -1;
 }
 
@@ -255,6 +268,14 @@ void ChoiceHandler::generateEvent( SDL_Renderer *pGameRenderer )
     if( gameTimer.getTicks() >= iMillisecondsBetweenDecisions )
     { // time for a decision
         getRandomDecision();
+        
+        if( arrDecisionTrees[iLastTreeTaken] == nullptr )
+        {
+            gameTimer.start();
+            return; // cheap way to break out 
+        }
+
+
         SDL_DestroyTexture(renderingDecisionTexture); // pop the last text out the heap
         SDL_DestroyTexture(renderingDecisionLeftOption); // pop the last text out the heap
         SDL_DestroyTexture(renderingDecisionRightOption); // pop the last text out the heap
@@ -318,7 +339,7 @@ void ChoiceHandler::render( SDL_Renderer *pGameRenderer, SDL_FRect *rectDecision
 
         rectLeftOpt = {
             rectDecisionWindow->x,
-            (rectDecisionWindow->y + rectDecisionWindow->h) - fLeftOptionHeight,
+            (rectDecisionWindow->y + rectDecisionWindow->h) - (fLeftOptionHeight * 2),
             fLeftOptionWidth,
             fLeftOptionHeight
         };
@@ -337,7 +358,7 @@ void ChoiceHandler::render( SDL_Renderer *pGameRenderer, SDL_FRect *rectDecision
     }
 }
 
-void ChoiceHandler::handleEvents( SDL_Event *event )
+void ChoiceHandler::handleEvents( SDL_Event *event, EventStack *pGameEventStack )
 {
     if( event->type == SDL_EVENT_MOUSE_BUTTON_UP && iLastTreeTaken >= 0 )
     {
@@ -347,10 +368,10 @@ void ChoiceHandler::handleEvents( SDL_Event *event )
 
         if( SDL_HasRectIntersectionFloat( &rectMouseClick, &rectLeftOpt ) )
         { // the left option was taken
-            printf("Left option taken!\n");
+            makeDecision( 0, pGameEventStack );
         } else if( SDL_HasRectIntersectionFloat( &rectMouseClick, &rectRightOpt ) )
         { // the right option was taken
-            printf("Right option taken!\n");
+            makeDecision( 1, pGameEventStack );
         }
     }
 }
