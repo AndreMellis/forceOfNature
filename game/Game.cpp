@@ -20,8 +20,11 @@ bool Game::init()
             SDL_SyncWindow( pGameWindow );
             SDL_GetWindowSize( pGameWindow, &iWindowWidth, &iWindowHeight );
 
-            // Radar Initialization
+            // Texture Initialization
             radar.loadTextures( pGameRenderer );
+            islandMap.loadTextures( pGameRenderer );
+
+            // rects
             rectRadar = {
                 iWindowWidth * .66f,
                 0,
@@ -39,7 +42,7 @@ bool Game::init()
             rectIslandMap = {
                 iWindowWidth * .66f,
                 iWindowHeight * .50f,
-                iWindowWidth * .33f,
+                iWindowWidth - ( iWindowWidth * .66f ),
                 iWindowHeight * .50f
             };
 
