@@ -130,9 +130,9 @@ void Game::run()
 void Game::handleRendering()
 {
     choiceHandler.render( pGameRenderer, &rectDecisionWindow );
-    radar.render( pGameRenderer, &rectRadar );
     riskHandler.render( pGameRenderer, &rectRisks );
     islandMap.render( pGameRenderer, &rectIslandMap );
+    radar.render( pGameRenderer, &rectRadar ); // make this last because red alert
 }
 
 void Game::handleEvents( SDL_Event *event )
@@ -143,6 +143,7 @@ void Game::handleEvents( SDL_Event *event )
 void Game::handleGameEvents()
 {
     choiceHandler.generateEvent( pGameRenderer );
+    weatherSystem.generateEvent( &gameEventStack );
 
     while( !gameEventStack.empty() )
     {
@@ -153,6 +154,7 @@ void Game::handleGameEvents()
         */
         riskHandler.handleGameEvent( &gameEventStack );
         islandMap.handleGameEvent( &gameEventStack );
+        radar.handleGameEvent( &gameEventStack );
 
         if( !gameEventStack.empty() && gameEventStack.top().eventType == eventLastGameEvent )
         { // the event stack is not empty and we processed an event that noone removed

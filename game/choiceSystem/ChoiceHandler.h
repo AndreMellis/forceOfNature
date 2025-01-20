@@ -34,7 +34,7 @@ private:
     int iLastTreeTaken;
 
     LTimer gameTimer;
-    const int iMillisecondsBetweenDecisions = 3 * 1000; // one dec per 30 secs
+    const int iMillisecondsBetweenDecisions = 12 * 1000; // one dec per 30 secs
 
     TTF_Font *choiceFont;
     SDL_Texture *renderingDecisionTexture, *renderingDecisionLeftOption, *renderingDecisionRightOption;

@@ -8,6 +8,7 @@ include_directories("game"
                     "game/choiceSystem"
                     "game/riskSystem"
                     "game/eventSystem"
+                    "game/weatherSystem"
                     )
 
 add_subdirectory(libs/customCLib) 
@@ -24,6 +25,7 @@ set(SOURCES
     game/choiceSystem/ChoiceHandler.cpp
     game/riskSystem/RiskHandler.cpp
     game/eventSystem/EventStack.cpp
+    game/weatherSystem/WeatherSystem.cpp
     )
 
 add_executable(forcesOfNature.out main.cpp ${SOURCES})

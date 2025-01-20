@@ -9,6 +9,7 @@
 
 #include "SDLTools/LTimer.h" // from customCLib
 #include "ChoiceHandler.h"
+#include "WeatherSystem.h"
 #include "RiskHandler.h"
 #include "EventStack.h"
 #include "IslandMap.h"
@@ -21,6 +22,7 @@ private:
     SDL_Window *pGameWindow;
 
     ChoiceHandler choiceHandler;
+    WeatherSystem weatherSystem;
     EventStack gameEventStack;
     RiskHandler riskHandler;
     IslandMap islandMap;

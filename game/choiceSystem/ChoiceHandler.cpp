@@ -15,11 +15,11 @@ ChoiceHandler::ChoiceHandler()
     genCoastLineTree();
     genZoningTree();
 
-    iLastTreeTaken = -1;
     gameTimer.start();
 
     choiceFont = nullptr;
     renderingDecisionTexture = nullptr;
+    iLastTreeTaken = -1;
 }
 
 Decision *ChoiceHandler::constructDecision(const char *strInputDescription, const char *strInputLeftChildDesc, const char *strInputRightChildDesc, RiskResults inputLeftResults, RiskResults inputRightResults, Decision *decInputLeftChild, Decision *decInputRightChild)
@@ -267,14 +267,11 @@ void ChoiceHandler::generateEvent( SDL_Renderer *pGameRenderer )
 
     if( gameTimer.getTicks() >= iMillisecondsBetweenDecisions )
     { // time for a decision
-        getRandomDecision();
-        
-        if( arrDecisionTrees[iLastTreeTaken] == nullptr )
-        {
-            gameTimer.start();
-            return; // cheap way to break out 
-        }
 
+        do
+        {
+            getRandomDecision();
+        } while( arrDecisionTrees[iLastTreeTaken] == nullptr );
 
         SDL_DestroyTexture(renderingDecisionTexture); // pop the last text out the heap
         SDL_DestroyTexture(renderingDecisionLeftOption); // pop the last text out the heap
