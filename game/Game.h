@@ -10,6 +10,7 @@
 #include "SDLTools/LTimer.h" // from customCLib
 #include "RiskHandler.h"
 #include "EventStack.h"
+#include "IslandMap.h"
 #include "Radar.h"
 
 class Game
@@ -20,6 +21,7 @@ private:
 
     EventStack gameEventStack;
     RiskHandler riskHandler;
+    IslandMap islandMap;
     LTimer fpsTimer;
     Radar radar;
 
@@ -28,7 +30,7 @@ private:
     const int iScreenTicksPerFrame = 1000 / iScreenFPS;
 
     // I want to hardset cords here for this game
-    SDL_FRect rectRadar, rectRisks;
+    SDL_FRect rectRadar, rectRisks, rectIslandMap;
 
     void tick();
     void handleRendering(); // a place to drop all the rendering and leave run clean

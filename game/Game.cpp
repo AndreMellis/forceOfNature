@@ -30,6 +30,13 @@ bool Game::init()
                 };
 
             rectRisks = {
+                0,
+                iWindowHeight * .50f,
+                iWindowWidth * .33f,
+                iWindowHeight * .50f
+            };
+
+            rectIslandMap = {
                 iWindowWidth * .66f,
                 iWindowHeight * .50f,
                 iWindowWidth * .33f,
@@ -112,6 +119,7 @@ void Game::handleRendering()
 {
     radar.render( pGameRenderer, &rectRadar );
     riskHandler.render( pGameRenderer, &rectRisks );
+    islandMap.render( pGameRenderer, &rectIslandMap );
 }
 
 void Game::handleEvents( SDL_Event &event )
@@ -128,6 +136,7 @@ void Game::handleGameEvents()
             HANDLE ALL GAME EVENTS HERE
         */
         riskHandler.handleGameEvent( &gameEventStack );
+        islandMap.handleGameEvent( &gameEventStack );
 
         if( !gameEventStack.empty() && gameEventStack.top().eventType == eventLastGameEvent )
         { // the event stack is not empty and we processed an event that noone removed

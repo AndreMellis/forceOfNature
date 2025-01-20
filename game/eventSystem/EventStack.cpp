@@ -24,6 +24,11 @@ bool EventStack::empty()
 
 Event EventStack::top()
 {
+    if(iCurrentEventCount < 0)
+    {
+        std::cerr << "Attempted access of an empty stack\n";
+        exit(139);
+    }
     return eventQueue[iCurrentEventCount];
 }
 

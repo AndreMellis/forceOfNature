@@ -20,6 +20,7 @@ find_package(SDL3_ttf REQUIRED)
 set(SOURCES 
     game/Game.cpp
     game/objects/Radar.cpp
+    game/objects/IslandMap.cpp
     game/choiceSystem/ChoiceHandler.cpp
     game/riskSystem/RiskHandler.cpp
     game/eventSystem/EventStack.cpp
